@@ -2,7 +2,7 @@ import { Input, Layout, Button, Space, Card, Row, Pagination } from "antd";
 import "./app.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SyncOutlined } from "@ant-design/icons";
+import { ShopFilled, ShoppingCartOutlined, SyncOutlined } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
 const { Search } = Input;
@@ -20,7 +20,9 @@ function App() {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `https://api.escuelajs.co/api/v1/products?offset=${(offset*25)-25}&limit=${offset*25}`
+        `https://api.escuelajs.co/api/v1/products?offset=${
+          (offset-1) * 25
+        }&limit=${25}`
       );
       setProductData(data);
       setLoading(false);
@@ -31,7 +33,6 @@ function App() {
   };
 
   const handlePagination = (page) => {
-    console.log(page);
     setCurrent(page);
   };
 
@@ -39,11 +40,18 @@ function App() {
     <>
       <Layout>
         <Header className="header">
+          <ShopFilled className="logo"/>
           <Search
             placeholder="Search for products brands and more"
             className="searchBox"
           />
           <Button className="loginButton">Login</Button>
+          <div className="headerOption">Become a Seller</div>
+          <div className="headerOption">More</div>
+          <div className="headerOption">
+            {" "}
+            <ShoppingCartOutlined /> Cart
+          </div>
         </Header>
         <Header className="categoryHeader">
           <Space size={50}>
@@ -103,8 +111,9 @@ function App() {
               <div className="paginationWrapper">
                 {productData && (
                   <Pagination
-                    total={70}
+                    total={80}
                     defaultCurrent={1}
+                    showSizeChanger={false}
                     current={current}
                     onChange={handlePagination}
                   />
